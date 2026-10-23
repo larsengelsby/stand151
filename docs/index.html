@@ -22,9 +22,11 @@ h1{font-size:22px;margin:0}
 .muted{color:var(--muted)}
 .small{font-size:13px}
 .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
-@media (min-width:620px){.kpis{grid-template-columns:repeat(4,1fr)}}
+@media (min-width:620px){.kpis{grid-template-columns:repeat(5,1fr)}}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .kpi .v{font-size:22px;font-weight:650;font-variant-numeric:tabular-nums}
+.kpi.wide{grid-column:1/-1}
+@media (min-width:620px){.kpi.wide{grid-column:auto}}
 .kpi.hero{grid-column:1/-1;background:var(--accent-soft);border-color:transparent}
 .kpi.hero .v{font-size:32px;color:var(--accent)}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -63,8 +65,9 @@ input.sog{width:100%;margin:10px 0 4px;padding:8px 10px;border:1px solid var(--l
     <div class="kpi"><div class="muted small">I dag</div><div class="v" id="kIdag">–</div></div>
     <div class="kpi"><div class="muted small">Sidste 7 dage</div><div class="v" id="kUge">–</div></div>
     <div class="kpi"><div class="muted small">Solgte varer</div><div class="v" id="kAntal">–</div></div>
-    <div class="kpi"><div class="muted small">På standen nu</div><div class="v" id="kStand">–</div>
-      <div class="small muted" id="kStandSub"></div></div>
+    <div class="kpi"><div class="muted small">Varer på standen</div><div class="v" id="kStand">–</div></div>
+    <div class="kpi wide"><div class="muted small">Varer for</div><div class="v" id="kVaerdi">–</div>
+      <div class="small muted" id="kVaerdiSub"></div></div>
   </div>
 
   <div class="row">
@@ -141,7 +144,9 @@ function tegn(){
   document.getElementById("kUge").textContent = kr(sum(solgte.filter(v=>new Date(v.solgt)>=ugeGr)));
   document.getElementById("kAntal").textContent = solgte.length;
   document.getElementById("kStand").textContent = aktive.length;
-  document.getElementById("kStandSub").textContent = "til " + kr(aktive.reduce((s,v)=>s+(v.pris||0),0));
+  const vaerdi = aktive.reduce((s,v)=>s+(v.pris||0),0);
+  document.getElementById("kVaerdi").textContent = kr(vaerdi);
+  document.getElementById("kVaerdiSub").textContent = komm ? "du får " + kr(netto(vaerdi)) + " hvis alt sælges" : "hvis alt sælges";
   document.getElementById("standSum").textContent = "Varer på standen (" + aktive.length + ")";
 
   // Graf
