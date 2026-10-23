@@ -98,16 +98,18 @@ def fortolk(html):
         }
     return varer
 
-
 def navn_fra_link(a):
-    t = a.get_text(" ", strip=True)
+    t = re.sub(r"\s+", " ", a.get_text(" ", strip=True)).strip()
+    # Linket omslutter hele varekortet: klip "Lyngby - Stand 151 Str. ..." af
+    m = re.search(r"\s*\S+\s*-\s*Stand\s*\d+", t)
+    if m:
+        t = t[:m.start()].strip()
     if t:
         return t
     img = a.find("img")
     if img and img.get("alt"):
         return img["alt"].strip()
     return a.get("title", "").strip()
-
 
 def hent_alle():
     s = requests.Session()
