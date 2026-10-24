@@ -2,8 +2,8 @@ name: Tjek stand
 
 on:
   schedule:
-    # Hver 3. time (tiderne er UTC, dvs. kl. 01.17, 04.17, 07.17 ... dansk sommertid +2)
-    - cron: "17 */3 * * *"
+       # Hver time, 17 minutter over (GitHub kan forsinke eller springe kørsler over)
+       - cron: "17 * * * *"
   workflow_dispatch: {}   # gør det muligt at køre tjekket manuelt
 
 permissions:
